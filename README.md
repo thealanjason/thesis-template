@@ -22,7 +22,7 @@ sources/
   appendix.tex              # Appendix
 cover/
   logoipsum-354.pdf         # Replace with your institution's logo
-  declarationofacademicintegrity.pdf  # Required for Master's and Bachelor's theses
+  declarationofacademicintegrity.pdf  # Required for Master's and Bachelor's theses at RWTH Aachen University
 images/                     # Place your figures here
 data/                       # Place your datasets here
 thesis.bib                  # Bibliography
