@@ -2,9 +2,9 @@ name: Build Thesis
 
 on:
   push:
-    branches: [master]
+    branches: [main]
   pull_request:
-    branches: [master]
+    branches: [main]
   workflow_dispatch:
 
 jobs:
@@ -25,12 +25,12 @@ jobs:
         run: tectonic -X compile thesis.tex
 
       - name: Push PDF to pdf branch
-        if: github.ref == 'refs/heads/master'
+        if: github.ref == 'refs/heads/main'
         run: |
           git config user.name github-actions
           git config user.email github-actions@github.com
           git checkout --orphan pdf
           git reset
-          git add thesis.pdf
+          git add -f thesis.pdf
           git commit -m "Update thesis PDF"
           git push --force origin pdf
