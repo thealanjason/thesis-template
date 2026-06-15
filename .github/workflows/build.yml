@@ -23,6 +23,13 @@ jobs:
           environment-file: environment.yml
           cache-environment: true
 
+      - name: Cache Tectonic packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/Tectonic
+          key: tectonic-${{ runner.os }}-${{ hashFiles('thesis.tex') }}
+          restore-keys: tectonic-${{ runner.os }}-
+
       - name: Build thesis
         shell: micromamba-shell {0}
         run: tectonic -X compile thesis.tex
