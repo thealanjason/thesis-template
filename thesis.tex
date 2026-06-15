@@ -20,13 +20,14 @@
 
 \usepackage[%
   colorlinks = true,
-  citecolor  = RoyalBlue,
+  citecolor  = red,
   linkcolor  = RoyalBlue,
   urlcolor   = RoyalBlue,
   unicode,
   ]{hyperref}
 
 \usepackage{bookmark}
+\usepackage{pdfpages}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Bibliography
@@ -38,7 +39,7 @@
 
 \usepackage[%
   autocite     = plain,
-  backend      = biber,
+  backend      = bibtex,
   doi          = true,
   url          = true,
   giveninits   = true,
@@ -50,7 +51,7 @@
   ]{biblatex}
 
 \input{bibliography-mimosis}
-\addbibresource{Thesis.bib}
+\addbibresource{thesis.bib}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Fonts
@@ -58,24 +59,21 @@
 
 \ifxetexorluatex
   \usepackage{unicode-math}
-  \setmainfont{EB Garamond}
-  \setmathfont{Garamond Math}
-
-  % Load some missing symbols from another font.
-  \setmathfont{STIX Two Math}[%
-    range = {
-      \sharp,
-      \natural,
-      \flat,
-      \clubsuit,
-      \spadesuit,
-      \checkmark
-    }
+  \setmainfont{texgyrepagella-regular.otf}[
+    BoldFont     = texgyrepagella-bold.otf,
+    ItalicFont   = texgyrepagella-italic.otf,
+    BoldItalicFont = texgyrepagella-bolditalic.otf
   ]
-  \setmonofont[Scale=MatchLowercase]{Source Code Pro}
+  \setmathfont{texgyrepagella-math.otf}
+  \setmonofont{texgyrecursor-regular.otf}[
+    BoldFont     = texgyrecursor-bold.otf,
+    ItalicFont   = texgyrecursor-italic.otf,
+    BoldItalicFont = texgyrecursor-bolditalic.otf,
+    Scale        = MatchLowercase
+  ]
 \else
-  \usepackage[lf]{ebgaramond}
-  \usepackage[oldstyle,scale=0.7]{sourcecodepro}
+  \usepackage{tgpagella}
+  \usepackage{tgcursor}
   \singlespacing
 \fi
 
@@ -95,8 +93,7 @@
   sort        = {Real numbers},
 }
 
-\makeindex
-\makeglossaries
+\makenoidxglossaries
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Ordinals
@@ -120,57 +117,54 @@
 % Incipit
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\title{\texttt{latex-mimosis}}
-\subtitle{A minimal, modern \LaTeX{} package for typesetting your thesis}
-\author{Bastian Rieck}
+% Set your thesis type: \masterthesistrue or \bachelorthesistrue
+% For project reports, leave both false — the academic integrity declaration will be omitted.
+\newif\ifmasterthesis
+\newif\ifbachelorthesis
+% \masterthesistrue  % <-- change this
+
+\title{Your Thesis Title}
+\newcommand{\germantitle}{Deutscher Titel der Thesis}
+\author{Your Name}
 
 \begin{document}
 
 \frontmatter
-  \include{Sources/Title}
-  \include{Sources/Abstract}
+  \include{sources/title}
+  \include{sources/abstract}
+  \include{sources/acknowledgements}
+  \include{sources/declarationofownwork}
 
   \tableofcontents
+  \listoffigures
+  \addcontentsline{toc}{chapter}{\listfigurename}
+  \listoftables
+  \addcontentsline{toc}{chapter}{\listtablename}
+
+  \begingroup
+    \let\clearpage\relax
+    \glsaddall
+    \printnoidxglossary[type=\acronymtype]
+    \newpage
+    \printnoidxglossary
+  \endgroup
+
+  \include{sources/conventions}
 
 \mainmatter
+  \include{sources/introduction}
+  \include{sources/relatedwork}
+  \include{sources/ownwork}
+  \include{sources/evaluation}
+  \include{sources/summaryandfuturework}
 
-  \part[A good part]{%
-    A good part\\
-    %
-    \vspace{1cm}
-    %
-    \begin{minipage}[l]{\textwidth}
-    %
-    \textnormal{%
-      \normalsize
-      %
-      \begin{singlespace*}
-        \onehalfspacing
-        %
-        You can also use parts in order to partition your great work
-        into larger `chunks'. This involves some manual adjustments in
-        terms of the layout, though.
-      \end{singlespace*}
-    }
-    \end{minipage}
-  }
-
-  \include{Sources/Introduction}
+\appendix
+  \include{sources/appendix}
 
 % This ensures that the subsequent sections are being included as root
 % items in the bookmark structure of your PDF reader.
 \bookmarksetup{startatroot}
 \backmatter
-
-  \begingroup
-    \let\clearpage\relax
-    \glsaddall
-    \printglossary[type=\acronymtype]
-    \newpage
-    \printglossary
-  \endgroup
-
-  \printindex
   \printbibliography
 
 \end{document}

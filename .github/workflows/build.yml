@@ -1,0 +1,36 @@
+name: Build Thesis
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up micromamba
+        uses: mamba-org/setup-micromamba@v2
+        with:
+          environment-file: environment.yml
+          cache-environment: true
+
+      - name: Build thesis
+        shell: micromamba-shell {0}
+        run: tectonic -X compile thesis.tex
+
+      - name: Push PDF to pdf branch
+        if: github.ref == 'refs/heads/master'
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git checkout --orphan pdf
+          git reset
+          git add thesis.pdf
+          git commit -m "Update thesis PDF"
+          git push --force origin pdf
