@@ -20,11 +20,12 @@ sources/
   evaluation.tex            # Chapter 4
   summaryandfuturework.tex  # Chapter 5
   appendix.tex              # Appendix
-cover/
+resources/
   logoipsum-354.pdf         # Replace with your institution's logo
   declarationofacademicintegrity.pdf  # Required for Master's and Bachelor's theses at RWTH Aachen University
 images/                     # Place your figures here
 data/                       # Place your datasets here
+scripts/                    # Python scripts to generate plots, with their conda environments
 thesis.bib                  # Bibliography
 ```
 
@@ -38,7 +39,7 @@ thesis.bib                  # Bibliography
    \subtitle{Your Subtitle}
    \author{Your Name}
    ```
-3. Replace `cover/logoipsum-354.pdf` with your institution's logo
+3. Replace `resources/logoipsum-354.pdf` with your institution's logo
 4. Set up the build environment and compile:
    ```bash
    micromamba env create -f environment.yml
