@@ -2,7 +2,9 @@
 
 A LaTeX thesis template based on [latex-mimosis](https://github.com/Pseudomanifold/latex-mimosis), with a basic chapter structure and student guidance built in.
 
-[![PDF](https://img.shields.io/badge/View-PDF-red?style=flat-square&logo=adobeacrobatreader&logoColor=white)](../../blob/pdf/thesis.pdf?raw=true)
+<a href="../../blob/pdf/thesis.pdf?raw=true">
+<img src="https://img.shields.io/badge/View-PDF-red?style=flat-square&logo=adobeacrobatreader&logoColor=white" alt="View the thesis PDF"/>
+</a>
 
 ## Structure
 
