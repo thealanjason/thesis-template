@@ -2,7 +2,7 @@
 
 A LaTeX thesis template based on [latex-mimosis](https://github.com/Pseudomanifold/latex-mimosis), with a basic chapter structure and student guidance built in.
 
-<a href="../../blob/pdf/thesis.pdf?raw=true">
+<a href="https://raw.githubusercontent.com/thealanjason/thesis-template/pdf/thesis.pdf">
 <img src="https://img.shields.io/badge/View-PDF-red?style=flat-square&logo=adobeacrobatreader&logoColor=white" alt="View the thesis PDF"/>
 </a>
 
@@ -34,15 +34,16 @@ thesis.bib                  # Bibliography
 ## Getting started
 
 1. Click **Use this template** on GitHub to create your own repository
-2. Set your title, author, and thesis type in `thesis.tex`:
+2. Update the PDF badge link in this README to point to your own repository (replace `thealanjason/thesis-template` with your username/repo)
+3. Set your title, author, and thesis type in `thesis.tex`:
    ```latex
    \masterthesistrue  % or \bachelorthesistrue — leave both false for project reports
    \title{Your Thesis Title}
    \subtitle{Your Subtitle}
    \author{Your Name}
    ```
-3. Replace `resources/logoipsum-354.pdf` with your institution's logo
-4. Set up the build environment and compile:
+4. Replace `resources/logoipsum-354.pdf` with your institution's logo
+5. Set up the build environment and compile:
    ```bash
    micromamba env create -f environment.yml
    micromamba activate thesis
