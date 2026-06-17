@@ -11,7 +11,7 @@ permissions:
   contents: write
 
 jobs:
-  build:
+  build-tectonic:
     runs-on: ubuntu-latest
 
     steps:
@@ -34,16 +34,16 @@ jobs:
         shell: micromamba-shell {0}
         run: tectonic -X compile thesis.tex
 
-      - name: Push PDF to pdf branch
+      - name: Push PDF to pdf-tectonic branch
         if: github.ref == 'refs/heads/main'
         run: |
           git config user.name github-actions
           git config user.email github-actions@github.com
-          git checkout --orphan pdf
+          git checkout --orphan pdf-tectonic
           git reset
           git add -f thesis.pdf
           git commit -m "Update thesis PDF"
-          git push --force origin pdf
+          git push --force origin pdf-tectonic
 
   build-tinytex:
     runs-on: ubuntu-latest

@@ -2,7 +2,7 @@
 
 A LaTeX thesis template based on [latex-mimosis](https://github.com/Pseudomanifold/latex-mimosis), with a basic chapter structure and student guidance built in.
 
-<a href="https://raw.githubusercontent.com/thealanjason/thesis-template/pdf/thesis.pdf">
+<a href="https://raw.githubusercontent.com/thealanjason/thesis-template/pdf-tectonic/thesis.pdf">
 <img src="https://img.shields.io/badge/View-PDF_(Tectonic)-red?style=flat-square&logo=adobeacrobatreader&logoColor=white" alt="View the thesis PDF (Tectonic)"/>
 </a>
 <a href="https://raw.githubusercontent.com/thealanjason/thesis-template/pdf-tinytex/thesis.pdf">
