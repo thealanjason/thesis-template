@@ -1,0 +1,49 @@
+name: Cross-platform Compatibility
+
+on:
+  workflow_dispatch:
+
+jobs:
+  tectonic:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up micromamba
+        uses: mamba-org/setup-micromamba@v2
+        with:
+          environment-file: environment.yml
+          cache-environment: true
+
+      - name: Build thesis
+        shell: micromamba-shell {0}
+        run: tectonic -X compile thesis.tex
+
+  tinytex:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up micromamba
+        uses: mamba-org/setup-micromamba@v2
+        with:
+          environment-file: environment.yml
+          cache-environment: true
+
+      - name: Set up TinyTeX
+        shell: micromamba-shell {0}
+        run: python thesis.py setup --tinytex
+
+      - name: Build thesis
+        shell: micromamba-shell {0}
+        run: |
+          source "$CONDA_PREFIX/etc/conda/activate.d/tinytex.sh"
+          python thesis.py build

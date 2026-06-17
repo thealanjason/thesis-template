@@ -44,3 +44,36 @@ jobs:
           git add -f thesis.pdf
           git commit -m "Update thesis PDF"
           git push --force origin pdf
+
+  build-tinytex:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up micromamba
+        uses: mamba-org/setup-micromamba@v2
+        with:
+          environment-file: environment.yml
+          cache-environment: true
+
+      - name: Set up TinyTeX
+        shell: micromamba-shell {0}
+        run: python thesis.py setup --tinytex
+
+      - name: Build thesis
+        shell: micromamba-shell {0}
+        run: |
+          source "$CONDA_PREFIX/etc/conda/activate.d/tinytex.sh"
+          python thesis.py build
+
+      - name: Push PDF to pdf-tinytex branch
+        if: github.ref == 'refs/heads/main'
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git checkout --orphan pdf-tinytex
+          git reset
+          git add -f thesis.pdf
+          git commit -m "Update thesis PDF"
+          git push --force origin pdf-tinytex
