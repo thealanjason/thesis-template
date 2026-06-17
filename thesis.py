@@ -27,25 +27,8 @@ def _read_packages():
     return [p for p in PACKAGES_FILE.read_text().splitlines() if p.strip()]
 
 
-def _write_vscode_settings(extra_tools=None):
-    tools = []
-
-    tectonic = shutil.which("tectonic")
-    if tectonic:
-        tools.append({
-            "name": "tectonic",
-            "command": tectonic,
-            "args": ["-X", "compile", "%DOC%.tex"],
-            "env": {},
-        })
-
-    if extra_tools:
-        tools.extend(extra_tools)
-
-    if not tools:
-        print("No tools found — skipping .vscode/settings.json")
-        return
-
+def _write_vscode_tool(tool):
+    """Upsert a single tool entry in .vscode/settings.json by name."""
     vscode_dir = Path(__file__).parent / ".vscode"
     vscode_dir.mkdir(exist_ok=True)
     settings_file = vscode_dir / "settings.json"
@@ -56,13 +39,29 @@ def _write_vscode_settings(extra_tools=None):
         except json.JSONDecodeError:
             pass
     settings.pop("latex-workshop.latex.recipes", None)
+    tools = [t for t in settings.get("latex-workshop.latex.tools", []) if t["name"] != tool["name"]]
+    tools.append(tool)
     settings["latex-workshop.latex.tools"] = tools
     settings_file.write_text(json.dumps(settings, indent=2) + "\n")
-    print("Wrote .vscode/settings.json for LaTeX Workshop")
+    print(f"Configured '{tool['name']}' in .vscode/settings.json")
 
 
 def cmd_setup(args):
+    if not args.tectonic and not args.tinytex:
+        sys.exit("Specify --tectonic, --tinytex, or both.")
+
     _ensure_system_path()
+
+    if args.tectonic:
+        tectonic = shutil.which("tectonic")
+        if not tectonic:
+            sys.exit("Error: tectonic not found. Is the conda environment activated?")
+        _write_vscode_tool({
+            "name": "tectonic",
+            "command": tectonic,
+            "args": ["-X", "compile", "%DOC%.tex"],
+            "env": {},
+        })
 
     if args.tinytex:
         import pytinytex
@@ -110,15 +109,13 @@ def cmd_setup(args):
                 pytinytex.install(pkg)
 
         full_path = f"{bin_path}:{os.environ.get('PATH', '')}"
-        _write_vscode_settings(extra_tools=[{
+        _write_vscode_tool({
             "name": "latexmk",
             "command": "latexmk",
             "args": ["-synctex=1", "-interaction=nonstopmode", "-file-line-error", "%DOC%"],
             "env": {"PATH": full_path},
-        }])
+        })
         print(f"TinyTeX installed to: {bin_path}")
-    else:
-        _write_vscode_settings()
 
 
 def cmd_build(args):
@@ -165,8 +162,9 @@ def main():
     parser = argparse.ArgumentParser(description="Thesis build helper.")
     sub = parser.add_subparsers(dest="command")
 
-    p_setup = sub.add_parser("setup", help="Configure LaTeX Workshop; use --tinytex to also install TinyTeX")
-    p_setup.add_argument("--tinytex", action="store_true", help="Download and install TinyTeX")
+    p_setup = sub.add_parser("setup", help="Configure LaTeX Workshop for the selected tool(s)")
+    p_setup.add_argument("--tectonic", action="store_true", help="Configure Tectonic")
+    p_setup.add_argument("--tinytex", action="store_true", help="Install TinyTeX and configure latexmk")
 
     sub.add_parser("build", help="Auto-install missing LaTeX packages then build with latexmk")
 
