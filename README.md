@@ -3,7 +3,13 @@
 A LaTeX thesis template based on [latex-mimosis](https://github.com/Pseudomanifold/latex-mimosis), with a basic chapter structure and student guidance built in.
 
 <a href="https://raw.githubusercontent.com/thealanjason/thesis-template/pdf/thesis.pdf">
-<img src="https://img.shields.io/badge/View-PDF-red?style=flat-square&logo=adobeacrobatreader&logoColor=white" alt="View the thesis PDF"/>
+<img src="https://img.shields.io/badge/View-PDF_(Tectonic)-red?style=flat-square&logo=adobeacrobatreader&logoColor=white" alt="View the thesis PDF (Tectonic)"/>
+</a>
+<a href="https://raw.githubusercontent.com/thealanjason/thesis-template/pdf-tinytex/thesis.pdf">
+<img src="https://img.shields.io/badge/View-PDF_(TinyTeX)-red?style=flat-square&logo=adobeacrobatreader&logoColor=white" alt="View the thesis PDF (TinyTeX)"/>
+</a>
+<a href="https://github.com/thealanjason/thesis-template/actions/workflows/compat.yml">
+<img src="https://img.shields.io/github/actions/workflow/status/thealanjason/thesis-template/compat.yml?label=Compatibility%3A%20Linux%20%7C%20macOS%20%7C%20Windows&style=flat-square" alt="Compatibility: Linux | macOS | Windows"/>
 </a>
 
 ## Structure
@@ -43,11 +49,27 @@ thesis.bib                  # Bibliography
    \author{Your Name}
    ```
 4. Replace `resources/logoipsum-354.pdf` with your institution's logo
-5. Set up the build environment and compile:
+5. Set up the build environment and compile. Two build options are available:
+
    ```bash
    micromamba env create -f environment.yml
    micromamba activate thesis
+   ```
+
+   Then choose how to build:
+
+   **Tectonic** (auto-downloads packages on first run):
+   ```bash
    tectonic -X compile thesis.tex
    ```
 
-The thesis is also built automatically on every push via GitHub Actions.
+   **TinyTeX + latexmk**:
+   ```bash
+   python thesis.py setup --tinytex
+   python thesis.py build
+   ```
+   `setup --tinytex` installs TinyTeX (one-time). `build` auto-installs any missing LaTeX packages and produces `thesis.pdf`. For subsequent builds, `latexmk` is sufficient.
+
+   Both tools also work with [LaTeX Workshop](https://marketplace.visualstudio.com/items?itemName=James-Yu.latex-workshop) in VS Code — run `python thesis.py setup` (or `setup --tinytex` for latexmk support) once and the recipes will work out of the box.
+
+The thesis is built automatically on every push via GitHub Actions using both options.

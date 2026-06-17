@@ -18,12 +18,15 @@
 *.ilg
 *.ind
 *.log
+*.lof
+*.lot
 *.out
 *.ps
 *.sav
 *.swp
 *.synctex.gz
 *.toc
+*.xdv
 
 *.run.xml
 *-blx.bib
@@ -35,3 +38,5 @@
 *.pgf-plot.*
 
 Figures/External/
+
+.vscode/settings.json
