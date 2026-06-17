@@ -40,46 +40,64 @@ thesis.bib                  # Bibliography
 ## Getting started
 
 1. Click **Use this template** on GitHub to create your own repository
-2. Update the badge URLs in this README (replace `thealanjason/thesis-template` with your username/repo)
-3. Set your title, author, and thesis type in `thesis.tex`:
-   ```latex
-   \masterthesistrue  % or \bachelorthesistrue — leave both false for project reports
-   \title{Your Thesis Title}
-   \subtitle{Your Subtitle}
-   \author{Your Name}
+2. Clone it locally:
+   ```bash
+   git clone https://github.com/your-username/your-repo.git
+   cd your-repo
    ```
-4. Replace `resources/logoipsum-354.pdf` with your institution's logo
-5. Create and activate the environment:
+3. Create and activate the environment:
    ```bash
    micromamba env create -f environment.yml
    micromamba activate thesis
    ```
+4. Build the thesis to verify everything works (see [Building](#building) below)
+5. Then make it yours:
+   - Set your title, author, and thesis type in `thesis.tex`:
+     ```latex
+     \masterthesistrue  % or \bachelorthesistrue — leave both false for project reports
+     \title{Your Thesis Title}
+     \subtitle{Your Subtitle}
+     \author{Your Name}
+     ```
+   - Replace `resources/logoipsum-354.pdf` with your institution's logo
+   - Update the badge URLs in this README (replace `thealanjason/thesis-template` with your username/repo)
 
 ## Building
 
-### LaTeX Workshop (VS Code)
+### Option A — Tectonic
 
-Install the [LaTeX Workshop](https://marketplace.visualstudio.com/items?itemName=James-Yu.latex-workshop) extension, then run once to configure its recipes:
+No TeX Live installation needed — packages are auto-downloaded on first run.
 
-```bash
-python thesis.py setup --tectonic            # Tectonic recipe
-python thesis.py setup --tinytex             # latexmk recipe (also installs TinyTeX)
-python thesis.py setup --tectonic --tinytex  # both
-```
-
-### Command line
-
-**Tectonic** — auto-downloads packages on first run:
+**Command line:**
 ```bash
 tectonic -X compile thesis.tex
 ```
 
-**TinyTeX + latexmk** — install TinyTeX once, then build:
+**LaTeX Workshop:** Install the [LaTeX Workshop](https://marketplace.visualstudio.com/items?itemName=James-Yu.latex-workshop) extension, run once to configure:
+```bash
+python thesis.py setup --tectonic
+```
+Then open `thesis.tex`, select **Recipe: tectonic** and click **Build**, then **View LaTeX PDF**.
+
+### Option B — latexmk (TinyTeX)
+
+Full TeX Live toolchain. Install TinyTeX once, then build:
+
+**Command line:**
 ```bash
 python thesis.py setup --tinytex
 python thesis.py build
 ```
-`build` auto-installs any missing LaTeX packages. For subsequent builds, `latexmk` is sufficient.
+`build` auto-installs any missing LaTeX packages. For subsequent builds:
+```bash
+latexmk
+```
+
+**LaTeX Workshop:** Install the [LaTeX Workshop](https://marketplace.visualstudio.com/items?itemName=James-Yu.latex-workshop) extension, run once to configure:
+```bash
+python thesis.py setup --tinytex
+```
+Then open `thesis.tex`, select **Recipe: latexmk** and click **Build**, then **View LaTeX PDF**.
 
 ---
 
