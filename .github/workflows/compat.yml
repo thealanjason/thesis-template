@@ -20,8 +20,7 @@ jobs:
           cache-environment: true
 
       - name: Build thesis
-        shell: micromamba-shell {0}
-        run: tectonic -X compile thesis.tex
+        run: micromamba run -n thesis tectonic -X compile thesis.tex
 
   tinytex:
     runs-on: ${{ matrix.os }}
@@ -38,22 +37,14 @@ jobs:
           environment-file: environment.yml
           cache-environment: true
 
-      - name: Expose conda prefix
-        shell: micromamba-shell {0}
-        run: echo "CONDA_PREFIX=$CONDA_PREFIX" >> $GITHUB_ENV
-
       - name: Cache TinyTeX
         uses: actions/cache@v4
         with:
-          path: ${{ env.CONDA_PREFIX }}/share/tinytex
+          path: ${{ env.MAMBA_ROOT_PREFIX }}/envs/thesis/share/tinytex
           key: tinytex-${{ runner.os }}-${{ hashFiles('tex-packages.txt') }}
 
       - name: Set up TinyTeX
-        shell: micromamba-shell {0}
-        run: python thesis.py setup --tinytex
+        run: micromamba run -n thesis python thesis.py setup --tinytex
 
       - name: Build thesis
-        shell: micromamba-shell {0}
-        run: |
-          source "$CONDA_PREFIX/etc/conda/activate.d/tinytex.sh"
-          python thesis.py build
+        run: micromamba run -n thesis python thesis.py build
