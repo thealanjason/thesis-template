@@ -38,6 +38,16 @@ jobs:
           environment-file: environment.yml
           cache-environment: true
 
+      - name: Expose conda prefix
+        shell: micromamba-shell {0}
+        run: echo "CONDA_PREFIX=$CONDA_PREFIX" >> $GITHUB_ENV
+
+      - name: Cache TinyTeX
+        uses: actions/cache@v4
+        with:
+          path: ${{ env.CONDA_PREFIX }}/share/tinytex
+          key: tinytex-${{ runner.os }}-${{ hashFiles('tex-packages.txt') }}
+
       - name: Set up TinyTeX
         shell: micromamba-shell {0}
         run: python thesis.py setup --tinytex
